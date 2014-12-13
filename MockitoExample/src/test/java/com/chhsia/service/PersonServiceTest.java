@@ -1,6 +1,7 @@
 package com.chhsia.service;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -15,6 +16,7 @@ import com.chhsia.dao.PersonDao;
 import com.chhsia.exception.PersonWithNoNameException;
 import com.chhsia.model.Person;
 
+//@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(MockitoJUnitRunner.class)
 public class PersonServiceTest {
 
@@ -28,6 +30,7 @@ public class PersonServiceTest {
 		personWithNullName = new Person(101l, null);
 		
 		when(personService.addPerson((Person)Matchers.anyObject())).thenReturn(100l);	
+		
 		when(personService.addPerson(personWithNullName)).thenThrow(new PersonWithNoNameException());	
 		
 	}
@@ -45,6 +48,17 @@ public class PersonServiceTest {
 	public void testPersonServiceWithNullPersonName() {
 		
 		personService.addPerson(personWithNullName);
+		
+	}
+	
+	@Test
+	public void testDeletePerson(){
+		
+		Person person = new Person(100l, "Chee-Hong");
+		
+		personService.deletePerson(person);
+		
+		verify(personDao).deletePerson(person);
 		
 	}
 }
